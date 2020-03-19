@@ -6,11 +6,10 @@ link:contributing.adoc[Contributing Guidelines].
 Make sure you first have all the dependencies installed. The source checkout
 should be under your $GOPATH/src directory.
 
+Checkout project or if you have forked it move it under github.com/awslabs
 [source,shell]
 ----
-brew install dep
-brew upgrade dep
-dep ensure
+cd $GOPATH/src/github.com/awslabs/aws-service-operator
 ----
 
 If you want to make changes to the operators, they are all generated code, to
@@ -37,9 +36,29 @@ generation libraries to auto generate the `pkg/client`.
 After have made sure the codegen is run you can then build the package and
 run it against a remote cluster by passing in the `kubeconfig` file.
 
-```bash
-./aws-operator server --kubeconfig ~/.kube/config --region us-west-2
-```
+For local development start k8s cluster using
+You can use link:https://kind.sigs.k8s.io/docs/user/quick-start/[kind]
+or link:https://kubernetes.io/docs/tasks/tools/install-minikube[minikube]
+for development
+
+[source,shell]
+----
+kind create cluster
+kubectl apply -f configs/aws-service-operator.yaml
+----
+
+Now you can run the aws-service-operator
+
+[source,shell]
+----
+./aws-service-operator server --kubeconfig ~/.kube/config --region us-east-2
+----
+
+Try to create a resource
+[source,shell]
+----
+kubectl apply -f examples/s3bucket.yaml
+----
 
 == Writing Additional Operators
 
@@ -47,3 +66,69 @@ Additional Custom Resource Definitions and Controllers can be created and
 deployed using the build in model file to controller logic. Because each
 resource is defined using Cloudformation we have a simple to use DSL for adding
 additional resources.
+
+To Add a resource start by create a model, we will follow adding a VPC so we will
+add ./model/vpc.yaml
+
+[source,yaml]
+----
+apiVersion: service-operator.aws/v1alpha1
+kind: ModelDefinition
+metadata:
+  name: VpcResource
+spec:
+  kind: Vpc
+  type: Spec # can be Spec or Data
+  queue: true
+  useCloudFormation: true
+  resource:
+    name: vpc
+    plural: vpcs
+    scope: Namespaced
+  body:
+    schema:
+      title: Vpc
+      type: object
+      properties:
+        - key: cidr
+          type: string
+          description: |
+            Network IP CIDR to be created, e.g. 172.21.64.0/21.
+          structKey: Cidr
+          templateKey: Cidr
+  output:
+
+  additionalResources:
+----
+Now we can run the aws-service-operator-codegen tool
+[source,yaml]
+----
+make aws-codegen
+----
+
+
+Then we create appropriate entries for vpc resource in ./pkg/operators/base.go
+
+== Getting this to work with VS or Goland IDEs
+
+This is a standard Go project with Go Module support so the only customization would
+be to setup the debugger, which is to setup project to build following Makefile build target:
+
+[source,shell]
+----
+go build -ldflags "-X main.commit=$(commitSHA) -X main.date=$(dateStr)" ./cmd/aws-service-operator
+----
+
+For Goland IDE
+
+Go tool Arguments:
+[source,shell]
+----
+-i -ldflags "-X main.commit=seizadi-dev -X main.date=1583889395"
+----
+
+Program Arguments:
+[source,shell]
+----
+server --kubeconfig /Users/seizadi/.kube/config --region us-east-2
+----
