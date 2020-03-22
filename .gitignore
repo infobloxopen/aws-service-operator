@@ -6,3 +6,4 @@ kubeconfig
 dist/
 .envrc
 .idea
+.id

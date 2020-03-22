@@ -11,6 +11,7 @@ import (
 	"github.com/awslabs/aws-service-operator/pkg/operators/snssubscription"
 	"github.com/awslabs/aws-service-operator/pkg/operators/snstopic"
 	"github.com/awslabs/aws-service-operator/pkg/operators/sqsqueue"
+	"github.com/awslabs/aws-service-operator/pkg/operators/vpc"
 	"github.com/awslabs/aws-service-operator/pkg/queuemanager"
 )
 
@@ -25,6 +26,7 @@ type base struct {
 	snssubscription        *snssubscription.Operator
 	snstopic               *snstopic.Operator
 	sqsqueue               *sqsqueue.Operator
+	vpc                    *vpc.Operator
 }
 
 func New(
@@ -42,6 +44,7 @@ func New(
 		snssubscription:        snssubscription.NewOperator(config, queueManager),
 		snstopic:               snstopic.NewOperator(config, queueManager),
 		sqsqueue:               sqsqueue.NewOperator(config, queueManager),
+		vpc:                    vpc.NewOperator(config, queueManager),
 	}
 }
 
@@ -69,6 +72,9 @@ func (b *base) Watch(ctx context.Context, namespace string) {
 	}
 	if b.config.Resources["sqsqueue"] {
 		go b.sqsqueue.StartWatch(ctx, namespace)
+	}
+	if b.config.Resources["vpc"] {
+		go b.vpc.StartWatch(ctx, namespace)
 	}
 
 	<-ctx.Done()

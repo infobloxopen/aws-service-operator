@@ -66,6 +66,8 @@ func (f *sharedInformerFactory) ForResource(resource schema.GroupVersionResource
 		return &genericInformer{resource: resource.GroupResource(), informer: f.Serviceoperator().V1alpha1().SNSTopics().Informer()}, nil
 	case v1alpha1.SchemeGroupVersion.WithResource("sqsqueues"):
 		return &genericInformer{resource: resource.GroupResource(), informer: f.Serviceoperator().V1alpha1().SQSQueues().Informer()}, nil
+	case v1alpha1.SchemeGroupVersion.WithResource("vpcs"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Serviceoperator().V1alpha1().Vpcs().Informer()}, nil
 
 	}
 

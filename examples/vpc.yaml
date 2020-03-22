@@ -1,0 +1,12 @@
+apiVersion: service-operator.aws/v1alpha1
+kind: Vpc
+metadata:
+  name: test-aws-operator-seizadi
+spec:
+  vpcName: test-aws-operator-seizadi
+  vpcCIDR: 10.192.0.0/16
+  publicSubnet1CIDR: 10.192.10.0/24
+  publicSubnet2CIDR: 10.192.11.0/24
+  privateSubnet1CIDR: 10.192.20.0/24
+  privateSubnet2CIDR: 10.192.21.0/24
+  env: Dev

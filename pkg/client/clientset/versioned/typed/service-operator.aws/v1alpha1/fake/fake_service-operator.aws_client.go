@@ -57,6 +57,10 @@ func (c *FakeServiceoperatorV1alpha1) SQSQueues(namespace string) v1alpha1.SQSQu
 	return &FakeSQSQueues{c, namespace}
 }
 
+func (c *FakeServiceoperatorV1alpha1) Vpcs(namespace string) v1alpha1.VpcInterface {
+	return &FakeVpcs{c, namespace}
+}
+
 // RESTClient returns a RESTClient that is used to communicate
 // with API server by this client implementation.
 func (c *FakeServiceoperatorV1alpha1) RESTClient() rest.Interface {

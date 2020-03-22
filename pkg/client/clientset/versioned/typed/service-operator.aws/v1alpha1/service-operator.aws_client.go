@@ -32,6 +32,7 @@ type ServiceoperatorV1alpha1Interface interface {
 	SNSSubscriptionsGetter
 	SNSTopicsGetter
 	SQSQueuesGetter
+	VpcsGetter
 }
 
 // ServiceoperatorV1alpha1Client is used to interact with features provided by the serviceoperator.aws group.
@@ -69,6 +70,10 @@ func (c *ServiceoperatorV1alpha1Client) SNSTopics(namespace string) SNSTopicInte
 
 func (c *ServiceoperatorV1alpha1Client) SQSQueues(namespace string) SQSQueueInterface {
 	return newSQSQueues(c, namespace)
+}
+
+func (c *ServiceoperatorV1alpha1Client) Vpcs(namespace string) VpcInterface {
+	return newVpcs(c, namespace)
 }
 
 // NewForConfig creates a new ServiceoperatorV1alpha1Client for the given config.

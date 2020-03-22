@@ -78,3 +78,11 @@ type SQSQueueListerExpansion interface{}
 // SQSQueueNamespaceListerExpansion allows custom methods to be added to
 // SQSQueueNamespaceLister.
 type SQSQueueNamespaceListerExpansion interface{}
+
+// VpcListerExpansion allows custom methods to be added to
+// VpcLister.
+type VpcListerExpansion interface{}
+
+// VpcNamespaceListerExpansion allows custom methods to be added to
+// VpcNamespaceLister.
+type VpcNamespaceListerExpansion interface{}

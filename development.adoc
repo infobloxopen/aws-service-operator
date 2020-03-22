@@ -51,7 +51,7 @@ Now you can run the aws-service-operator
 
 [source,shell]
 ----
-./aws-service-operator server --kubeconfig ~/.kube/config --region us-east-2
+./aws-service-operator server --kubeconfig ~/.kube/config --region us-east-2 --bucket aws.service.operator.state.seizadi.infoblox.com
 ----
 
 Try to create a resource
@@ -97,17 +97,88 @@ spec:
           structKey: Cidr
           templateKey: Cidr
   output:
-
-  additionalResources:
+    schema:
+      type: object
+      properties:
+        - key: vpnARN
+          type: string
+          description: |
+            The VPC ARN for the AWS resource.
+          structKey: VpnARN
+          templateKey: VpnARN
 ----
 Now we can run the aws-service-operator-codegen tool
-[source,yaml]
+[source,bash]
 ----
 make aws-codegen
 ----
+or
+[source,bash]
+----
+make rebuild
+----
+
+The code generator will generate a number of new code packages to handle VPC:
+[source,bash]
+        new file:   models/vpc.yaml
+        new file:   pkg/apis/service-operator.aws/v1alpha1/vpc.go
+        new file:   pkg/client/clientset/versioned/typed/service-operator.aws/v1alpha1/fake/fake_vpc.go
+        new file:   pkg/client/clientset/versioned/typed/service-operator.aws/v1alpha1/vpc.go
+        new file:   pkg/client/informers/externalversions/service-operator.aws/v1alpha1/vpc.go
+        new file:   pkg/client/listers/service-operator.aws/v1alpha1/vpc.go
+        new file:   pkg/operators/vpc/cft.go
+        new file:   pkg/operators/vpc/operator.go
+----
+
+It will also update existing code to include VPC model support:
+[source,bash]
+...
+        modified:   pkg/operators/base/base.go
+        modified:   pkg/helpers/template_functions.go
+        modified:   configs/aws-service-operator.yaml
+        modified:   pkg/apis/service-operator.aws/v1alpha1/zz_generated.deepcopy.go
+        modified:   pkg/client/clientset/versioned/typed/service-operator.aws/v1alpha1/generated_expansion.go
+        modified:   pkg/client/clientset/versioned/typed/service-operator.aws/v1alpha1/service-operator.aws_client.go
+        modified:   pkg/client/informers/externalversions/generic.go
+        modified:   pkg/client/informers/externalversions/service-operator.aws/v1alpha1/interface.go
+        modified:   pkg/client/listers/service-operator.aws/v1alpha1/expansion_generated.go
+----
+
+Note the entry points entries for vpc resource in ./pkg/operators/base.go
+
+In addition to the models/vpc.model we need to provide the corresponding Cloud Formation
+Template in the examples/cloudformationtemplates/vpc.yaml The parameters and outputs in
+model should match the Cloud Formation Template.
+
+=== TODO Helm Chart
+There is work to make sure Helm Chart is updated for any new changes, mainly CRD changes
+for installation and updating the version and the image.
+
+== Operator Lifecycle
+The best place to start would be pkg/operators/base.go where each of the CR operators are
+started, for example below you see the code to start the operator for VPC CR:
+[source,go]
+----
+func (b *base) Watch(ctx context.Context, namespace string) {
+	//....
+		if b.config.Resources["vpc"] {
+		go b.vpc.StartWatch(ctx, namespace)
+	}
+	//....
+}
+----
+Note that you can configure which of the CR controllers run with config.Resources, so for this
+new CR we need to configure it to run in init() from main.go:
+[source,go]
+----
+func init() {
+	//....
+	rootCmd.PersistentFlags().StringVarP(&resources, "resources", "", "cloudformationtemplate,dynamodb,ecrrepository,elasticache,s3bucket,snssubscription,snstopic,sqsqueue,vpc", "Comma delimited list of CRDs to deploy")
+	//....
+}
+----
 
 
-Then we create appropriate entries for vpc resource in ./pkg/operators/base.go
 
 == Getting this to work with VS or Goland IDEs
 
@@ -121,6 +192,12 @@ go build -ldflags "-X main.commit=$(commitSHA) -X main.date=$(dateStr)" ./cmd/aw
 
 For Goland IDE
 
+Environment Variables:
+[source,shell]
+----
+AWS_ID=$(shell aws configure get aws_access_key_id);AWS_SECRET_ACCESS_KEY=$(shell aws configure get aws_secret_access_key);AWS_REGION=us-east-2----
+----
+
 Go tool Arguments:
 [source,shell]
 ----
@@ -130,5 +207,5 @@ Go tool Arguments:
 Program Arguments:
 [source,shell]
 ----
-server --kubeconfig /Users/seizadi/.kube/config --region us-east-2
+server --kubeconfig /Users/seizadi/.kube/config --region us-east-2 --bucket aws.service.operator.state.seizadi.infoblox.com
 ----

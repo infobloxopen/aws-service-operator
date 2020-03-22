@@ -30,3 +30,5 @@ type SNSSubscriptionExpansion interface{}
 type SNSTopicExpansion interface{}
 
 type SQSQueueExpansion interface{}
+
+type VpcExpansion interface{}

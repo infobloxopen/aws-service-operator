@@ -40,3 +40,48 @@ codegen: aws-codegen k8s-codegen
 
 .PHONY: rebuild
 rebuild: codegen build
+
+loadcft:
+	kubectl apply -f examples/cloudformationtemplates
+
+
+.id:
+	git config user.email | awk -F@ '{print $$1}' > .id
+
+s3: .id
+	# TODO: make our own namespaces
+	#kubectl create ns `cat .id` || true
+	# TOOD - Move the examples to a namespace away from default
+	#kubectl -n `cat .id` apply -f examples/s3bucket.yaml
+	kubectl apply -f examples/s3bucket.yaml
+
+vpc: .id
+	# TODO: make our own namespaces
+	#kubectl create ns `cat .id` || true
+	# TOOD - Move the examples to a namespace away from default
+	#kubectl -n `cat .id` apply -f examples/s3bucket.yaml
+	kubectl apply -f examples/vpc.yaml
+
+status:
+	# TOOD - Move the examples to a namespace away from default
+	#kubectl -n `cat .id` get s3buckets
+	#kubectl -n `cat .id` describe s3bucket private
+	kubectl get vpcs
+	kubectl describe vpc test-aws-operator-seizadi
+
+delete:
+	# TOOD - Move the examples to a namespace away from default
+	#kubectl -n `cat .id` delete s3bucket private
+	kubectl delete vpc test-aws-operator-seizadi
+
+s3-status:
+	# TOOD - Move the examples to a namespace away from default
+	#kubectl -n `cat .id` get s3buckets
+	#kubectl -n `cat .id` describe s3bucket private
+	kubectl get s3buckets
+	kubectl describe s3bucket test.aws-operator.seizadi.infoblox.com
+
+s3-delete:
+	# TOOD - Move the examples to a namespace away from default
+	#kubectl -n `cat .id` delete s3bucket private
+	kubectl delete s3bucket test.aws-operator.seizadi.infoblox.com

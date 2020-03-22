@@ -44,16 +44,19 @@ aws cloudformation create-stack \
   --parameters \
     ParameterKey=WorkerArn,ParameterValue=<K8S_WORKER_NODE_IAM_ROLE>
 
-Your resulting IAM role arn should look something like `arn:aws:iam::<ACCOUNT_ID>:role/aws-service-operator`
+Your resulting IAM role arn should look something like
+`arn:aws:iam::<ACCOUNT_ID>:role/aws-service-operator`
 
 === Deploy the aws-service-operator
 
-Before applying these resources make sure to replace the following placeholders with the approriate information in `configs/aws-service-operator.yaml`
+Before applying these resources make sure to replace the following placeholders
+with the approriate information in `configs/aws-service-operator.yaml`
 
 - `<ACCOUNT_ID>` - Your AWS Account ID
 - `<REGION>` - The AWS Region you're working in
 - `<CLUSTER_NAME>` - The name of your cluster
-- `<BUCKET_NAME>` - (optional) The operator stores certain things in s3 create a bucket or provide an existing bucket for the operator to use `i.e. aws s3 mb s3://foobar`
+- `<BUCKET_NAME>` - (optional) The operator stores certain things in s3 create a bucket
+or provide an existing bucket for the operator to use `i.e. aws s3 mb s3://foobar`
 
 
 .1. Create the operator

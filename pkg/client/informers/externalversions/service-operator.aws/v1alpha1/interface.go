@@ -37,6 +37,8 @@ type Interface interface {
 	SNSTopics() SNSTopicInformer
 	// SQSQueues returns a SQSQueueInformer.
 	SQSQueues() SQSQueueInformer
+	// Vpcs returns a VpcInformer.
+	Vpcs() VpcInformer
 }
 
 type version struct {
@@ -88,4 +90,9 @@ func (v *version) SNSTopics() SNSTopicInformer {
 // SQSQueues returns a SQSQueueInformer.
 func (v *version) SQSQueues() SQSQueueInformer {
 	return &sQSQueueInformer{factory: v.factory, namespace: v.namespace, tweakListOptions: v.tweakListOptions}
+}
+
+// Vpcs returns a VpcInformer.
+func (v *version) Vpcs() VpcInformer {
+	return &vpcInformer{factory: v.factory, namespace: v.namespace, tweakListOptions: v.tweakListOptions}
 }

@@ -23,6 +23,7 @@ func New() Helpers {
 		GetSNSSubscriptionByName:        GetSNSSubscriptionByName,
 		GetSNSTopicByName:               GetSNSTopicByName,
 		GetSQSQueueByName:               GetSQSQueueByName,
+		GetVpcByName:                    GetVpcByName,
 	}
 }
 
@@ -37,6 +38,7 @@ type Helpers struct {
 	GetSNSSubscriptionByName        func(config.Config, string, string) (interface{}, error)
 	GetSNSTopicByName               func(config.Config, string, string) (interface{}, error)
 	GetSQSQueueByName               func(config.Config, string, string) (interface{}, error)
+	GetVpcByName                    func(config.Config, string, string) (interface{}, error)
 }
 
 // GetCloudFormationTemplateByName will find the resource by name
@@ -135,6 +137,19 @@ func GetSQSQueueByName(config config.Config, name string, namespace string) (int
 	logger := config.Logger
 	clientSet, _ := awsclient.NewForConfig(config.RESTConfig)
 	resource, err := clientSet.SQSQueues(namespace).Get(name, metav1.GetOptions{})
+	if err != nil {
+		logger.WithError(err).Error("error getting sns topic")
+		return "", err
+	}
+
+	return resource, nil
+}
+
+// GetVpcByName will find the resource by name
+func GetVpcByName(config config.Config, name string, namespace string) (interface{}, error) {
+	logger := config.Logger
+	clientSet, _ := awsclient.NewForConfig(config.RESTConfig)
+	resource, err := clientSet.Vpcs(namespace).Get(name, metav1.GetOptions{})
 	if err != nil {
 		logger.WithError(err).Error("error getting sns topic")
 		return "", err

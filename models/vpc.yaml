@@ -1,0 +1,112 @@
+apiVersion: service-operator.aws/v1alpha1
+kind: ModelDefinition
+metadata:
+  name: VpcResource
+spec:
+  kind: Vpc
+  type: Spec # can be Spec or Data
+  queue: true
+  useCloudFormation: true
+  resource:
+    name: vpc
+    plural: vpcs
+    scope: Namespaced
+  body:
+    schema:
+      title: Vpc
+      type: object
+      properties:
+        - key: vpcName
+          type: string
+          description: |
+            VPC Name
+          structKey: VpcName
+          templateKey: VpcName
+        - key: vpcCIDR
+          type: string
+          description: |
+            IP range (CIDR notation) for this VPC
+          structKey: VpcCIDR
+          templateKey: VpcCIDR
+        - key: publicSubnet1CIDR
+          type: string
+          description: |
+            IP range (CIDR notation) for the public subnet in the first Availability Zone
+          structKey: PublicSubnet1CIDR
+          templateKey: PublicSubnet1CIDR
+        - key: publicSubnet2CIDR
+          type: string
+          description: |
+            IP range (CIDR notation) for the public subnet in the second Availability Zone
+          structKey: PublicSubnet2CIDR
+          templateKey: PublicSubnet2CIDR
+        - key: privateSubnet1CIDR
+          type: string
+          description: |
+            IP range (CIDR notation) for the private subnet in the first Availability Zone
+          structKey: PrivateSubnet1CIDR
+          templateKey: PrivateSubnet1CIDR
+        - key: privateSubnet2CIDR
+          type: string
+          description: |
+            IP range (CIDR notation) for the private subnet in the second Availability Zone
+          structKey: PrivateSubnet2CIDR
+          templateKey: PrivateSubnet2CIDR
+        - key: env
+          type: string
+          description: |
+            The environment for the cluster and backend AWS resources, e.g. Dev
+          structKey: Env
+          templateKey: Env
+  output:
+    schema:
+      type: object
+      properties:
+        - key: vpnARN
+          type: string
+          description: |
+            A reference to the created VPC ARN
+          structKey: VpnARN
+          templateKey: VPC
+        - key: publicSubnets
+          type: string
+          description: |
+            A list of the public subnets
+          structKey: PublicSubnets
+          templateKey: PublicSubnets
+        - key: privateSubnets
+          type: string
+          description: |
+            A list of the private subnets
+          structKey: PrivateSubnets
+          templateKey: PrivateSubnets
+        - key: publicSubnet1
+          type: string
+          description: |
+            A reference to the public subnet in the 1st Availability Zone
+          structKey: PublicSubnet1
+          templateKey: PublicSubnet1
+        - key: publicSubnet2
+          type: string
+          description: |
+            A reference to the public subnet in the 2nd Availability Zone
+          structKey: PublicSubnet2
+          templateKey: PublicSubnet2
+        - key: PrivateSubnet1
+          type: string
+          description: |
+            A reference to the private subnet in the 1st Availability Zone
+          structKey: PrivateSubnet1
+          templateKey: PrivateSubnet1
+        - key: privateSubnet2
+          type: string
+          description: |
+            A reference to the private subnet in the 2nd Availability Zone
+          structKey: PrivateSubnet2
+          templateKey: PrivateSubnet2
+        - key: noIngressSecurityGroup
+          type: string
+          description: |
+            Security group with no ingress rule (FIXME - Should make it public later)
+          structKey: NoIngressSecurityGroup
+          templateKey: NoIngressSecurityGroup

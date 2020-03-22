@@ -64,7 +64,8 @@ func addFileToS3(config config.Config, bucket string, filename string, template 
 	_, err := svc.PutObject(&s3.PutObjectInput{
 		Bucket: aws.String(bucket),
 		Key:    aws.String(filename),
-		ACL:    aws.String("public-read"),
+		// FIXME - Figure out how to set the ACL for now the state bucket is set to private and public-read is rejected
+		//ACL:    aws.String("public-read"),
 		Body:   bytes.NewReader(buffer),
 	})
 	return err
