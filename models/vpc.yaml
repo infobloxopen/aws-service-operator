@@ -16,97 +16,197 @@ spec:
       title: Vpc
       type: object
       properties:
-        - key: vpcName
+        - key: stackName
           type: string
           description: |
-            VPC Name
-          structKey: VpcName
-          templateKey: VpcName
+            Stack Name
+          structKey: StackName
+          templateKey: StackName
         - key: vpcCIDR
           type: string
           description: |
             IP range (CIDR notation) for this VPC
           structKey: VpcCIDR
           templateKey: VpcCIDR
-        - key: publicSubnet1CIDR
-          type: string
-          description: |
-            IP range (CIDR notation) for the public subnet in the first Availability Zone
-          structKey: PublicSubnet1CIDR
-          templateKey: PublicSubnet1CIDR
-        - key: publicSubnet2CIDR
-          type: string
-          description: |
-            IP range (CIDR notation) for the public subnet in the second Availability Zone
-          structKey: PublicSubnet2CIDR
-          templateKey: PublicSubnet2CIDR
-        - key: privateSubnet1CIDR
-          type: string
-          description: |
-            IP range (CIDR notation) for the private subnet in the first Availability Zone
-          structKey: PrivateSubnet1CIDR
-          templateKey: PrivateSubnet1CIDR
-        - key: privateSubnet2CIDR
-          type: string
-          description: |
-            IP range (CIDR notation) for the private subnet in the second Availability Zone
-          structKey: PrivateSubnet2CIDR
-          templateKey: PrivateSubnet2CIDR
         - key: env
           type: string
           description: |
             The environment for the cluster and backend AWS resources, e.g. Dev
           structKey: Env
           templateKey: Env
+        - key: jenkinsPeerEnable
+          type: string
+          description: |
+            Enable Jenkins peering
+          structKey: JenkinsPeerEnable
+          templateKey: JenkinsPeerEnable
+        - key: jenkinsPeerProperties
+          type: string
+          description: |
+            Jenkins peering connection properties comma delimited
+            in the format: {JenkinsCIDR},{JenkinsVpcId},{JenkinsRegion},{JenkinsAccountId}
+          structKey: JenkinsPeerProperties
+          templateKey: JenkinsPeerProperties
+        - key: rdsPeerEnable
+          type: string
+          description: |
+            Enable RDS peering
+          structKey: RDSPeerEnable
+          templateKey: RDSPeerEnable
+        - key: rdsPeerProperties
+          type: string
+          description: |
+            RDS peering connection properties comma delimited
+            in the format: {RDSCIDR},{RDSVpcId},{RDSRegion},{RDSAccountId}
+          structKey: RDSPeerProperties
+          templateKey: RDSPeerProperties
+        - key: redisPeerEnable
+          type: string
+          description: |
+            Enable RDS peering
+          structKey: RedisPeerEnable
+          templateKey: RedisPeerEnable
+        - key: redisPeerProperties
+          type: string
+          description: |
+            Redis peering connection properties comma delimited
+            in the format: {RedisCIDR},{RedisVpcId},{RedisRegion},{RedisAccountId}
+          structKey: RedisPeerProperties
+          templateKey: RedisPeerProperties
+        - key: tidePeerEnable
+          type: string
+          description: |
+            TIDE peering Enable
+          structKey: TIDEPeerEnable
+          templateKey: TIDEPeerEnable
+        - key: tidePeerProperties
+          type: string
+          description: |
+            TIDE peering connection properties comma delimited
+            in the format: {TIDECIDR},{TIDEVpcId},{TIDERegion},{TIDEAccountId}
+          structKey: TIDEPeerProperties
+          templateKey: TIDEPeerProperties
+        - key: bastionPeerProperties
+          type: string
+          description: |
+            Bastion peering connection properties comma delimited
+            in the format: {BastionCIDR},{BastionVpcId},{BastionRegion},{BastionAccountId}
+          structKey: BastionPeerProperties
+          templateKey: BastionPeerProperties
+        - key: wbr1
+          type: string
+          description: |
+            White Box Router(WBR) #1
+          structKey: WBR1
+          templateKey: WBR1
+        - key: wbr2
+          type: string
+          description: |
+            White Box Router(WBR) #2
+          structKey: WBR2
+          templateKey: WBR2
+        - key: azIndexList
+          type: string
+          description: |
+            AZ list comma delimited format: 0,1,2
+          structKey: AzIndexList
+          templateKey: AzIndexList
   output:
     schema:
       type: object
       properties:
         - key: vpnARN
           type: string
-          description: |
-            A reference to the created VPC ARN
+          description: A reference to the created VPC ARN
           structKey: VpnARN
           templateKey: VPC
-        - key: publicSubnets
+        - key: VpcCIDR
           type: string
-          description: |
-            A list of the public subnets
-          structKey: PublicSubnets
-          templateKey: PublicSubnets
-        - key: privateSubnets
+          description: Network CIDR for VPC
+          structKey: VpcCIDR
+          templateKey: VpcCIDR
+        - key: utilityRouteTable
           type: string
-          description: |
-            A list of the private subnets
-          structKey: PrivateSubnets
-          templateKey: PrivateSubnets
-        - key: publicSubnet1
+          description: Public route table for VPC
+          Value: !Ref UtilityRouteTable
+          structKey: UtilityRouteTable
+          templateKey: UtilityRouteTable
+        - key: privateRouteTable
           type: string
-          description: |
-            A reference to the public subnet in the 1st Availability Zone
-          structKey: PublicSubnet1
-          templateKey: PublicSubnet1
-        - key: publicSubnet2
+          description: Private route table for VPC
+          structKey: PrivateRouteTable
+          templateKey: PrivateRouteTable
+        - key: UtilitySubnet1
           type: string
-          description: |
-            A reference to the public subnet in the 2nd Availability Zone
-          structKey: PublicSubnet2
-          templateKey: PublicSubnet2
-        - key: PrivateSubnet1
+          description: Public Subnet 1 for VPC
+          structKey: UtilitySubnet1
+          templateKey: UtilitySubnet1
+        - key: utilitySubnet2
           type: string
-          description: |
-            A reference to the private subnet in the 1st Availability Zone
+          description: Public Subnet 2 for VPC
+          structKey: UtilitySubnet2
+          templateKey: UtilitySubnet2
+        - key: UtilitySubnet3
+          type: string
+          description: Public Subnet 3 for VPC
+          structKey: UtilitySubnet3
+          templateKey: UtilitySubnet3
+        - key: privateSubnet1
+          type: string
+          description: Private Subnet 1 for VPC
+          Value: !Ref PrivateSubnet1
           structKey: PrivateSubnet1
           templateKey: PrivateSubnet1
         - key: privateSubnet2
           type: string
-          description: |
-            A reference to the private subnet in the 2nd Availability Zone
+          description: Private Subnet 2 for VPC
           structKey: PrivateSubnet2
           templateKey: PrivateSubnet2
-        - key: noIngressSecurityGroup
+        - key: privateSubnet3
           type: string
-          description: |
-            Security group with no ingress rule (FIXME - Should make it public later)
-          structKey: NoIngressSecurityGroup
-          templateKey: NoIngressSecurityGroup
+          description: Private Subnet 3 for VPC
+          structKey: PrivateSubnet3
+          templateKey: PrivateSubnet3
+        - key: quaggaSubnet1
+          type: string
+          description: Quagga Subnet 1 for VPC
+          structKey: QuaggaSubnet1
+          templateKey: QuaggaSubnet1
+        - key: quaggaSubnet2
+          type: string
+          description: Quagga Subnet 2 for VPC
+          Value: !Ref QuaggaSubnet2
+          structKey: QuaggaSubnet2
+          templateKey: QuaggaSubnet2
+        - key: quaggaSubnet3
+          type: string
+          description: Quagga Subnet 3 for VPC
+          Value: !Ref QuaggaSubnet3
+          structKey: QuaggaSubnet3
+          templateKey: QuaggaSubnet3
+        - key: jenkinsPCX
+          type: string
+          description: Jenkins Peering Connection (Must be accepted)
+          structKey: JenkinsPCX
+          templateKey: JenkinsPCX
+        - key: rdsPCX
+          type: string
+          description: RDS Peering Connection (Must be accepted)
+          structKey: RDSPCX
+          templateKey: RDSPCX
+        - key: redisPCX
+          type: string
+          description: Redis Peering Connection (Must be accepted)
+          structKey: RedisPCX
+          templateKey: RedisPCX
+        - key: tidePCX
+          type: string
+          description: TIDE Peering Connection (Must be accepted)
+          structKey: TIDEPCX
+          templateKey: TIDEPCX
+        - key: bastionPCX
+          type: string
+          description: Bastion Peering Connection (Must be accepted)
+          structKey: BastionPCX
+          templateKey: BastionPCX
+

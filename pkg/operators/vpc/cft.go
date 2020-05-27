@@ -80,61 +80,117 @@ func (s *Cloudformation) CreateStack() (output *cloudformation.CreateStackOutput
 	resourceVersion := helpers.CreateParam("ResourceVersion", s.Vpc.ResourceVersion)
 	namespace := helpers.CreateParam("Namespace", s.Vpc.Namespace)
 	clusterName := helpers.CreateParam("ClusterName", s.config.ClusterName)
-	vpcNameTemp := "{{.Obj.Spec.VpcName}}"
-	vpcNameValue, err := helpers.Templatize(vpcNameTemp, helpers.Data{Obj: s.Vpc, Config: s.config, Helpers: helpers.New()})
+	stackNameTemp := "{{.Obj.Spec.StackName}}"
+	stackNameValue, err := helpers.Templatize(stackNameTemp, helpers.Data{Obj: s.Vpc, Config: s.config, Helpers: helpers.New()})
 	if err != nil {
 		return output, err
 	}
-	vpcName := helpers.CreateParam("VpcName", helpers.Stringify(vpcNameValue))
+	stackName := helpers.CreateParam("StackName", helpers.Stringify(stackNameValue))
 	vpcCIDRTemp := "{{.Obj.Spec.VpcCIDR}}"
 	vpcCIDRValue, err := helpers.Templatize(vpcCIDRTemp, helpers.Data{Obj: s.Vpc, Config: s.config, Helpers: helpers.New()})
 	if err != nil {
 		return output, err
 	}
 	vpcCIDR := helpers.CreateParam("VpcCIDR", helpers.Stringify(vpcCIDRValue))
-	publicSubnet1CIDRTemp := "{{.Obj.Spec.PublicSubnet1CIDR}}"
-	publicSubnet1CIDRValue, err := helpers.Templatize(publicSubnet1CIDRTemp, helpers.Data{Obj: s.Vpc, Config: s.config, Helpers: helpers.New()})
-	if err != nil {
-		return output, err
-	}
-	publicSubnet1CIDR := helpers.CreateParam("PublicSubnet1CIDR", helpers.Stringify(publicSubnet1CIDRValue))
-	publicSubnet2CIDRTemp := "{{.Obj.Spec.PublicSubnet2CIDR}}"
-	publicSubnet2CIDRValue, err := helpers.Templatize(publicSubnet2CIDRTemp, helpers.Data{Obj: s.Vpc, Config: s.config, Helpers: helpers.New()})
-	if err != nil {
-		return output, err
-	}
-	publicSubnet2CIDR := helpers.CreateParam("PublicSubnet2CIDR", helpers.Stringify(publicSubnet2CIDRValue))
-	privateSubnet1CIDRTemp := "{{.Obj.Spec.PrivateSubnet1CIDR}}"
-	privateSubnet1CIDRValue, err := helpers.Templatize(privateSubnet1CIDRTemp, helpers.Data{Obj: s.Vpc, Config: s.config, Helpers: helpers.New()})
-	if err != nil {
-		return output, err
-	}
-	privateSubnet1CIDR := helpers.CreateParam("PrivateSubnet1CIDR", helpers.Stringify(privateSubnet1CIDRValue))
-	privateSubnet2CIDRTemp := "{{.Obj.Spec.PrivateSubnet2CIDR}}"
-	privateSubnet2CIDRValue, err := helpers.Templatize(privateSubnet2CIDRTemp, helpers.Data{Obj: s.Vpc, Config: s.config, Helpers: helpers.New()})
-	if err != nil {
-		return output, err
-	}
-	privateSubnet2CIDR := helpers.CreateParam("PrivateSubnet2CIDR", helpers.Stringify(privateSubnet2CIDRValue))
 	envTemp := "{{.Obj.Spec.Env}}"
 	envValue, err := helpers.Templatize(envTemp, helpers.Data{Obj: s.Vpc, Config: s.config, Helpers: helpers.New()})
 	if err != nil {
 		return output, err
 	}
 	env := helpers.CreateParam("Env", helpers.Stringify(envValue))
+	jenkinsPeerEnableTemp := "{{.Obj.Spec.JenkinsPeerEnable}}"
+	jenkinsPeerEnableValue, err := helpers.Templatize(jenkinsPeerEnableTemp, helpers.Data{Obj: s.Vpc, Config: s.config, Helpers: helpers.New()})
+	if err != nil {
+		return output, err
+	}
+	jenkinsPeerEnable := helpers.CreateParam("JenkinsPeerEnable", helpers.Stringify(jenkinsPeerEnableValue))
+	jenkinsPeerPropertiesTemp := "{{.Obj.Spec.JenkinsPeerProperties}}"
+	jenkinsPeerPropertiesValue, err := helpers.Templatize(jenkinsPeerPropertiesTemp, helpers.Data{Obj: s.Vpc, Config: s.config, Helpers: helpers.New()})
+	if err != nil {
+		return output, err
+	}
+	jenkinsPeerProperties := helpers.CreateParam("JenkinsPeerProperties", helpers.Stringify(jenkinsPeerPropertiesValue))
+	rdsPeerEnableTemp := "{{.Obj.Spec.RDSPeerEnable}}"
+	rdsPeerEnableValue, err := helpers.Templatize(rdsPeerEnableTemp, helpers.Data{Obj: s.Vpc, Config: s.config, Helpers: helpers.New()})
+	if err != nil {
+		return output, err
+	}
+	rdsPeerEnable := helpers.CreateParam("RDSPeerEnable", helpers.Stringify(rdsPeerEnableValue))
+	rdsPeerPropertiesTemp := "{{.Obj.Spec.RDSPeerProperties}}"
+	rdsPeerPropertiesValue, err := helpers.Templatize(rdsPeerPropertiesTemp, helpers.Data{Obj: s.Vpc, Config: s.config, Helpers: helpers.New()})
+	if err != nil {
+		return output, err
+	}
+	rdsPeerProperties := helpers.CreateParam("RDSPeerProperties", helpers.Stringify(rdsPeerPropertiesValue))
+	redisPeerEnableTemp := "{{.Obj.Spec.RedisPeerEnable}}"
+	redisPeerEnableValue, err := helpers.Templatize(redisPeerEnableTemp, helpers.Data{Obj: s.Vpc, Config: s.config, Helpers: helpers.New()})
+	if err != nil {
+		return output, err
+	}
+	redisPeerEnable := helpers.CreateParam("RedisPeerEnable", helpers.Stringify(redisPeerEnableValue))
+	redisPeerPropertiesTemp := "{{.Obj.Spec.RedisPeerProperties}}"
+	redisPeerPropertiesValue, err := helpers.Templatize(redisPeerPropertiesTemp, helpers.Data{Obj: s.Vpc, Config: s.config, Helpers: helpers.New()})
+	if err != nil {
+		return output, err
+	}
+	redisPeerProperties := helpers.CreateParam("RedisPeerProperties", helpers.Stringify(redisPeerPropertiesValue))
+	tidePeerEnableTemp := "{{.Obj.Spec.TIDEPeerEnable}}"
+	tidePeerEnableValue, err := helpers.Templatize(tidePeerEnableTemp, helpers.Data{Obj: s.Vpc, Config: s.config, Helpers: helpers.New()})
+	if err != nil {
+		return output, err
+	}
+	tidePeerEnable := helpers.CreateParam("TIDEPeerEnable", helpers.Stringify(tidePeerEnableValue))
+	tidePeerPropertiesTemp := "{{.Obj.Spec.TIDEPeerProperties}}"
+	tidePeerPropertiesValue, err := helpers.Templatize(tidePeerPropertiesTemp, helpers.Data{Obj: s.Vpc, Config: s.config, Helpers: helpers.New()})
+	if err != nil {
+		return output, err
+	}
+	tidePeerProperties := helpers.CreateParam("TIDEPeerProperties", helpers.Stringify(tidePeerPropertiesValue))
+	bastionPeerPropertiesTemp := "{{.Obj.Spec.BastionPeerProperties}}"
+	bastionPeerPropertiesValue, err := helpers.Templatize(bastionPeerPropertiesTemp, helpers.Data{Obj: s.Vpc, Config: s.config, Helpers: helpers.New()})
+	if err != nil {
+		return output, err
+	}
+	bastionPeerProperties := helpers.CreateParam("BastionPeerProperties", helpers.Stringify(bastionPeerPropertiesValue))
+	wbr1Temp := "{{.Obj.Spec.WBR1}}"
+	wbr1Value, err := helpers.Templatize(wbr1Temp, helpers.Data{Obj: s.Vpc, Config: s.config, Helpers: helpers.New()})
+	if err != nil {
+		return output, err
+	}
+	wbr1 := helpers.CreateParam("WBR1", helpers.Stringify(wbr1Value))
+	wbr2Temp := "{{.Obj.Spec.WBR2}}"
+	wbr2Value, err := helpers.Templatize(wbr2Temp, helpers.Data{Obj: s.Vpc, Config: s.config, Helpers: helpers.New()})
+	if err != nil {
+		return output, err
+	}
+	wbr2 := helpers.CreateParam("WBR2", helpers.Stringify(wbr2Value))
+	azIndexListTemp := "{{.Obj.Spec.AzIndexList}}"
+	azIndexListValue, err := helpers.Templatize(azIndexListTemp, helpers.Data{Obj: s.Vpc, Config: s.config, Helpers: helpers.New()})
+	if err != nil {
+		return output, err
+	}
+	azIndexList := helpers.CreateParam("AzIndexList", helpers.Stringify(azIndexListValue))
 
 	parameters := []*cloudformation.Parameter{}
 	parameters = append(parameters, resourceName)
 	parameters = append(parameters, resourceVersion)
 	parameters = append(parameters, namespace)
 	parameters = append(parameters, clusterName)
-	parameters = append(parameters, vpcName)
+	parameters = append(parameters, stackName)
 	parameters = append(parameters, vpcCIDR)
-	parameters = append(parameters, publicSubnet1CIDR)
-	parameters = append(parameters, publicSubnet2CIDR)
-	parameters = append(parameters, privateSubnet1CIDR)
-	parameters = append(parameters, privateSubnet2CIDR)
 	parameters = append(parameters, env)
+	parameters = append(parameters, jenkinsPeerEnable)
+	parameters = append(parameters, jenkinsPeerProperties)
+	parameters = append(parameters, rdsPeerEnable)
+	parameters = append(parameters, rdsPeerProperties)
+	parameters = append(parameters, redisPeerEnable)
+	parameters = append(parameters, redisPeerProperties)
+	parameters = append(parameters, tidePeerEnable)
+	parameters = append(parameters, tidePeerProperties)
+	parameters = append(parameters, bastionPeerProperties)
+	parameters = append(parameters, wbr1)
+	parameters = append(parameters, wbr2)
+	parameters = append(parameters, azIndexList)
 
 	stackInputs.SetParameters(parameters)
 
@@ -174,61 +230,117 @@ func (s *Cloudformation) UpdateStack(updated *awsV1alpha1.Vpc) (output *cloudfor
 	resourceVersion := helpers.CreateParam("ResourceVersion", s.Vpc.ResourceVersion)
 	namespace := helpers.CreateParam("Namespace", s.Vpc.Namespace)
 	clusterName := helpers.CreateParam("ClusterName", s.config.ClusterName)
-	vpcNameTemp := "{{.Obj.Spec.VpcName}}"
-	vpcNameValue, err := helpers.Templatize(vpcNameTemp, helpers.Data{Obj: updated, Config: s.config, Helpers: helpers.New()})
+	stackNameTemp := "{{.Obj.Spec.StackName}}"
+	stackNameValue, err := helpers.Templatize(stackNameTemp, helpers.Data{Obj: updated, Config: s.config, Helpers: helpers.New()})
 	if err != nil {
 		return output, err
 	}
-	vpcName := helpers.CreateParam("VpcName", helpers.Stringify(vpcNameValue))
+	stackName := helpers.CreateParam("StackName", helpers.Stringify(stackNameValue))
 	vpcCIDRTemp := "{{.Obj.Spec.VpcCIDR}}"
 	vpcCIDRValue, err := helpers.Templatize(vpcCIDRTemp, helpers.Data{Obj: updated, Config: s.config, Helpers: helpers.New()})
 	if err != nil {
 		return output, err
 	}
 	vpcCIDR := helpers.CreateParam("VpcCIDR", helpers.Stringify(vpcCIDRValue))
-	publicSubnet1CIDRTemp := "{{.Obj.Spec.PublicSubnet1CIDR}}"
-	publicSubnet1CIDRValue, err := helpers.Templatize(publicSubnet1CIDRTemp, helpers.Data{Obj: updated, Config: s.config, Helpers: helpers.New()})
-	if err != nil {
-		return output, err
-	}
-	publicSubnet1CIDR := helpers.CreateParam("PublicSubnet1CIDR", helpers.Stringify(publicSubnet1CIDRValue))
-	publicSubnet2CIDRTemp := "{{.Obj.Spec.PublicSubnet2CIDR}}"
-	publicSubnet2CIDRValue, err := helpers.Templatize(publicSubnet2CIDRTemp, helpers.Data{Obj: updated, Config: s.config, Helpers: helpers.New()})
-	if err != nil {
-		return output, err
-	}
-	publicSubnet2CIDR := helpers.CreateParam("PublicSubnet2CIDR", helpers.Stringify(publicSubnet2CIDRValue))
-	privateSubnet1CIDRTemp := "{{.Obj.Spec.PrivateSubnet1CIDR}}"
-	privateSubnet1CIDRValue, err := helpers.Templatize(privateSubnet1CIDRTemp, helpers.Data{Obj: updated, Config: s.config, Helpers: helpers.New()})
-	if err != nil {
-		return output, err
-	}
-	privateSubnet1CIDR := helpers.CreateParam("PrivateSubnet1CIDR", helpers.Stringify(privateSubnet1CIDRValue))
-	privateSubnet2CIDRTemp := "{{.Obj.Spec.PrivateSubnet2CIDR}}"
-	privateSubnet2CIDRValue, err := helpers.Templatize(privateSubnet2CIDRTemp, helpers.Data{Obj: updated, Config: s.config, Helpers: helpers.New()})
-	if err != nil {
-		return output, err
-	}
-	privateSubnet2CIDR := helpers.CreateParam("PrivateSubnet2CIDR", helpers.Stringify(privateSubnet2CIDRValue))
 	envTemp := "{{.Obj.Spec.Env}}"
 	envValue, err := helpers.Templatize(envTemp, helpers.Data{Obj: updated, Config: s.config, Helpers: helpers.New()})
 	if err != nil {
 		return output, err
 	}
 	env := helpers.CreateParam("Env", helpers.Stringify(envValue))
+	jenkinsPeerEnableTemp := "{{.Obj.Spec.JenkinsPeerEnable}}"
+	jenkinsPeerEnableValue, err := helpers.Templatize(jenkinsPeerEnableTemp, helpers.Data{Obj: updated, Config: s.config, Helpers: helpers.New()})
+	if err != nil {
+		return output, err
+	}
+	jenkinsPeerEnable := helpers.CreateParam("JenkinsPeerEnable", helpers.Stringify(jenkinsPeerEnableValue))
+	jenkinsPeerPropertiesTemp := "{{.Obj.Spec.JenkinsPeerProperties}}"
+	jenkinsPeerPropertiesValue, err := helpers.Templatize(jenkinsPeerPropertiesTemp, helpers.Data{Obj: updated, Config: s.config, Helpers: helpers.New()})
+	if err != nil {
+		return output, err
+	}
+	jenkinsPeerProperties := helpers.CreateParam("JenkinsPeerProperties", helpers.Stringify(jenkinsPeerPropertiesValue))
+	rdsPeerEnableTemp := "{{.Obj.Spec.RDSPeerEnable}}"
+	rdsPeerEnableValue, err := helpers.Templatize(rdsPeerEnableTemp, helpers.Data{Obj: updated, Config: s.config, Helpers: helpers.New()})
+	if err != nil {
+		return output, err
+	}
+	rdsPeerEnable := helpers.CreateParam("RDSPeerEnable", helpers.Stringify(rdsPeerEnableValue))
+	rdsPeerPropertiesTemp := "{{.Obj.Spec.RDSPeerProperties}}"
+	rdsPeerPropertiesValue, err := helpers.Templatize(rdsPeerPropertiesTemp, helpers.Data{Obj: updated, Config: s.config, Helpers: helpers.New()})
+	if err != nil {
+		return output, err
+	}
+	rdsPeerProperties := helpers.CreateParam("RDSPeerProperties", helpers.Stringify(rdsPeerPropertiesValue))
+	redisPeerEnableTemp := "{{.Obj.Spec.RedisPeerEnable}}"
+	redisPeerEnableValue, err := helpers.Templatize(redisPeerEnableTemp, helpers.Data{Obj: updated, Config: s.config, Helpers: helpers.New()})
+	if err != nil {
+		return output, err
+	}
+	redisPeerEnable := helpers.CreateParam("RedisPeerEnable", helpers.Stringify(redisPeerEnableValue))
+	redisPeerPropertiesTemp := "{{.Obj.Spec.RedisPeerProperties}}"
+	redisPeerPropertiesValue, err := helpers.Templatize(redisPeerPropertiesTemp, helpers.Data{Obj: updated, Config: s.config, Helpers: helpers.New()})
+	if err != nil {
+		return output, err
+	}
+	redisPeerProperties := helpers.CreateParam("RedisPeerProperties", helpers.Stringify(redisPeerPropertiesValue))
+	tidePeerEnableTemp := "{{.Obj.Spec.TIDEPeerEnable}}"
+	tidePeerEnableValue, err := helpers.Templatize(tidePeerEnableTemp, helpers.Data{Obj: updated, Config: s.config, Helpers: helpers.New()})
+	if err != nil {
+		return output, err
+	}
+	tidePeerEnable := helpers.CreateParam("TIDEPeerEnable", helpers.Stringify(tidePeerEnableValue))
+	tidePeerPropertiesTemp := "{{.Obj.Spec.TIDEPeerProperties}}"
+	tidePeerPropertiesValue, err := helpers.Templatize(tidePeerPropertiesTemp, helpers.Data{Obj: updated, Config: s.config, Helpers: helpers.New()})
+	if err != nil {
+		return output, err
+	}
+	tidePeerProperties := helpers.CreateParam("TIDEPeerProperties", helpers.Stringify(tidePeerPropertiesValue))
+	bastionPeerPropertiesTemp := "{{.Obj.Spec.BastionPeerProperties}}"
+	bastionPeerPropertiesValue, err := helpers.Templatize(bastionPeerPropertiesTemp, helpers.Data{Obj: updated, Config: s.config, Helpers: helpers.New()})
+	if err != nil {
+		return output, err
+	}
+	bastionPeerProperties := helpers.CreateParam("BastionPeerProperties", helpers.Stringify(bastionPeerPropertiesValue))
+	wbr1Temp := "{{.Obj.Spec.WBR1}}"
+	wbr1Value, err := helpers.Templatize(wbr1Temp, helpers.Data{Obj: updated, Config: s.config, Helpers: helpers.New()})
+	if err != nil {
+		return output, err
+	}
+	wbr1 := helpers.CreateParam("WBR1", helpers.Stringify(wbr1Value))
+	wbr2Temp := "{{.Obj.Spec.WBR2}}"
+	wbr2Value, err := helpers.Templatize(wbr2Temp, helpers.Data{Obj: updated, Config: s.config, Helpers: helpers.New()})
+	if err != nil {
+		return output, err
+	}
+	wbr2 := helpers.CreateParam("WBR2", helpers.Stringify(wbr2Value))
+	azIndexListTemp := "{{.Obj.Spec.AzIndexList}}"
+	azIndexListValue, err := helpers.Templatize(azIndexListTemp, helpers.Data{Obj: updated, Config: s.config, Helpers: helpers.New()})
+	if err != nil {
+		return output, err
+	}
+	azIndexList := helpers.CreateParam("AzIndexList", helpers.Stringify(azIndexListValue))
 
 	parameters := []*cloudformation.Parameter{}
 	parameters = append(parameters, resourceName)
 	parameters = append(parameters, resourceVersion)
 	parameters = append(parameters, namespace)
 	parameters = append(parameters, clusterName)
-	parameters = append(parameters, vpcName)
+	parameters = append(parameters, stackName)
 	parameters = append(parameters, vpcCIDR)
-	parameters = append(parameters, publicSubnet1CIDR)
-	parameters = append(parameters, publicSubnet2CIDR)
-	parameters = append(parameters, privateSubnet1CIDR)
-	parameters = append(parameters, privateSubnet2CIDR)
 	parameters = append(parameters, env)
+	parameters = append(parameters, jenkinsPeerEnable)
+	parameters = append(parameters, jenkinsPeerProperties)
+	parameters = append(parameters, rdsPeerEnable)
+	parameters = append(parameters, rdsPeerProperties)
+	parameters = append(parameters, redisPeerEnable)
+	parameters = append(parameters, redisPeerProperties)
+	parameters = append(parameters, tidePeerEnable)
+	parameters = append(parameters, tidePeerProperties)
+	parameters = append(parameters, bastionPeerProperties)
+	parameters = append(parameters, wbr1)
+	parameters = append(parameters, wbr2)
+	parameters = append(parameters, azIndexList)
 
 	stackInputs.SetParameters(parameters)
 

@@ -41,9 +41,11 @@ codegen: aws-codegen k8s-codegen
 .PHONY: rebuild
 rebuild: codegen build
 
-loadcft:
+loadcfts:
 	kubectl apply -f examples/cloudformationtemplates
 
+loadvpc:
+	kubectl apply -f .vpc.yaml
 
 .id:
 	git config user.email | awk -F@ '{print $$1}' > .id

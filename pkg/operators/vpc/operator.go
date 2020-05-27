@@ -209,13 +209,23 @@ func updateStatus(config config.Config, name string, namespace string, stackID s
 			logger.WithError(err).Error("error getting outputs")
 		}
 		resourceCopy.Output.VpnARN = outputs["VPC"]
-		resourceCopy.Output.PublicSubnets = outputs["PublicSubnets"]
-		resourceCopy.Output.PrivateSubnets = outputs["PrivateSubnets"]
-		resourceCopy.Output.PublicSubnet1 = outputs["PublicSubnet1"]
-		resourceCopy.Output.PublicSubnet2 = outputs["PublicSubnet2"]
+		resourceCopy.Output.VpcCIDR = outputs["VpcCIDR"]
+		resourceCopy.Output.UtilityRouteTable = outputs["UtilityRouteTable"]
+		resourceCopy.Output.PrivateRouteTable = outputs["PrivateRouteTable"]
+		resourceCopy.Output.UtilitySubnet1 = outputs["UtilitySubnet1"]
+		resourceCopy.Output.UtilitySubnet2 = outputs["UtilitySubnet2"]
+		resourceCopy.Output.UtilitySubnet3 = outputs["UtilitySubnet3"]
 		resourceCopy.Output.PrivateSubnet1 = outputs["PrivateSubnet1"]
 		resourceCopy.Output.PrivateSubnet2 = outputs["PrivateSubnet2"]
-		resourceCopy.Output.NoIngressSecurityGroup = outputs["NoIngressSecurityGroup"]
+		resourceCopy.Output.PrivateSubnet3 = outputs["PrivateSubnet3"]
+		resourceCopy.Output.QuaggaSubnet1 = outputs["QuaggaSubnet1"]
+		resourceCopy.Output.QuaggaSubnet2 = outputs["QuaggaSubnet2"]
+		resourceCopy.Output.QuaggaSubnet3 = outputs["QuaggaSubnet3"]
+		resourceCopy.Output.JenkinsPCX = outputs["JenkinsPCX"]
+		resourceCopy.Output.RDSPCX = outputs["RDSPCX"]
+		resourceCopy.Output.RedisPCX = outputs["RedisPCX"]
+		resourceCopy.Output.TIDEPCX = outputs["TIDEPCX"]
+		resourceCopy.Output.BastionPCX = outputs["BastionPCX"]
 	}
 
 	_, err = clientSet.Vpcs(namespace).Update(resourceCopy)
